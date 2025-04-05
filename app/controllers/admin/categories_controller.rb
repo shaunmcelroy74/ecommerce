@@ -25,7 +25,8 @@ class Admin::CategoriesController < AdminController
 
     respond_to do |format|
       if @admin_category.save
-        redirect_to [ :admin, @admin_category ], notice: "Category was successfully created."
+        format.html { redirect_to admin_categories_path, notice: "Category was successfully created." }
+
 
         format.json { render :show, status: :created, location: @admin_category }
       else
@@ -39,8 +40,8 @@ class Admin::CategoriesController < AdminController
   def update
     respond_to do |format|
       if @admin_category.update(admin_category_params)
-        redirect_to [ :admin, @admin_category ], notice: "Category was successfully updated."
-        format.json { render :show, status: :ok, location: @admin_category }
+        format.html { redirect_to admin_categories_path, notice: "Category was successfully updated." }
+        format.json { render :index, status: :ok, location: admin_categories_path }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @admin_category.errors, status: :unprocessable_entity }
