@@ -1,4 +1,4 @@
 class AdminController < ApplicationController
-  def admin
+  def index
   end
 end
