@@ -13,7 +13,7 @@
   </div>
   <div>
     <strong class="block font-medium mb-1">Category:</strong>
-    <%= product.category_id %>
+    <%= product.category.name if product.category.present? %>
   </div>
   <div>
     <strong class="block font-medium mb-1">Active:</strong>
