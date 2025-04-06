@@ -21,12 +21,12 @@ class Admin::ProductsController < AdminController
 
   # POST /admin/products or /admin/products.json
   def create
-    @admin_product = Product.new(admin_product_params)
+    @admin_product = Product.new(product_params)
 
     respond_to do |format|
       if @admin_product.save
-        format.html { redirect_to @admin_product, notice: "Product was successfully created." }
-        format.json { render :show, status: :created, location: @admin_product }
+        format.html { redirect_to admin_product_path(@admin_product), notice: "Product was successfully created." }
+        format.json { render :show, status: :created, location: admin_product_path(@admin_product) }
       else
         format.html { render :new, status: :unprocessable_entity }
         format.json { render json: @admin_product.errors, status: :unprocessable_entity }
@@ -37,8 +37,8 @@ class Admin::ProductsController < AdminController
   # PATCH/PUT /admin/products/1 or /admin/products/1.json
   def update
     respond_to do |format|
-      if @admin_product.update(admin_product_params)
-        format.html { redirect_to @admin_product, notice: "Product was successfully updated." }
+      if @admin_product.update(product_params)
+        redirect_to admin_product_path(@admin_product), notice: "Product was successfully updated."
         format.json { render :show, status: :ok, location: @admin_product }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -64,7 +64,7 @@ class Admin::ProductsController < AdminController
     end
 
     # Only allow a list of trusted parameters through.
-    def admin_product_params
-      params.expect(product: [ :name, :description, :price, :category_id, :active ])
+    def product_params
+      params.require(:product).permit(:name, :description, :price, :category_id, :active, :image)
     end
 end
