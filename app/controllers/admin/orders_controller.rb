@@ -8,6 +8,7 @@ class Admin::OrdersController < AdminController
 
   # GET /admin/orders/1 or /admin/orders/1.json
   def show
+    @admin_order = Order.find(params[:id])
   end
 
   # GET /admin/orders/new
