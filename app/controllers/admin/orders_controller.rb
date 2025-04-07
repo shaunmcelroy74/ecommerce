@@ -39,8 +39,8 @@ class Admin::OrdersController < AdminController
   def update
     respond_to do |format|
       if @admin_order.update(admin_order_params)
-        format.html { redirect_to @admin_order, notice: "Order was successfully updated." }
-        format.json { render :show, status: :ok, location: @admin_order }
+        format.html { redirect_to admin_order_path(@admin_order), notice: "Order was successfully updated." }
+        format.json { render :show, status: :ok, location: admin_order_path(@admin_order) }
       else
         format.html { render :edit, status: :unprocessable_entity }
         format.json { render json: @admin_order.errors, status: :unprocessable_entity }
