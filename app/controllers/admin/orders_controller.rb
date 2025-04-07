@@ -18,7 +18,6 @@ class Admin::OrdersController < AdminController
 
   # GET /admin/orders/1/edit
   def edit
-    @admin_order = Order.find(params[:id])
   end
 
   # POST /admin/orders or /admin/orders.json
