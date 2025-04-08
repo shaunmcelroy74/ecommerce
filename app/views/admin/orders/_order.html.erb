@@ -9,10 +9,20 @@
   </div>
   <div>
     <strong class="block font-medium mb-1">Total:</strong>
-    <%= order.total %>
+    <%= number_to_currency(order.total) %>
   </div>
   <div>
     <strong class="block font-medium mb-1">Address:</strong>
     <%= order.address %>
   </div>
+
+  <% if order.order_products.any? %>
+    <strong class="block font-medium mb-1">Product:</strong>
+    <% order.order_products.each do |op| %>
+      <div class="flex justify-between">
+        <span><%= op.product.name %></span>
+        <span>x<%= op.quantity %></span>
+      </div>
+    <% end %>
+  <% end %>
 </div>
