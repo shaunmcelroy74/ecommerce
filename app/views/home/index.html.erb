@@ -8,3 +8,20 @@
   <%= link_to "Shop Now", root_path,
         class: "inline-block bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded mt-4" %>
 </div>
+
+<div class="flex flex-wrap justify-center items-center gap-10">
+  <% @main_categories.each do |category| %>
+    <%= link_to category_path(category) do %>
+      <div class="flex flex-col mb-4">
+        <h2 class="text-white font-medium text-lg text-center mb-6">
+          <%= category.name %>
+        </h2>
+        <%= if category.image.present?
+              image_tag(category.image, class: "max-w-lg")
+            else
+              image_tag("http://via.placeholder.com/300", class: "max-w-lg")
+            end %>
+      </div>
+    <% end %>
+  <% end %>
+</div>
