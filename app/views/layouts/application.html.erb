@@ -40,6 +40,11 @@
 
   <body>
     <%= render "shared/navbar" %>
-    …
+
+    <!-- Use container to center and pad content -->
+    <main class="pt-16 container mx-auto px-4">
+      <h1>Home</h1>
+      <%= yield %>
+    </main>
   </body>
 </html>
