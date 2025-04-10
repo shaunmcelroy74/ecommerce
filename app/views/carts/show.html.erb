@@ -1,11 +1,31 @@
+<!-- app/views/carts/show.html.erb -->
 <main class="pt-28 max-w-7xl mx-auto px-4">
   <h1 class="text-3xl font-bold">Cart Show Page</h1>
-  <div data-controller="cart">
-    <div class="mt-4 font-medium" id="total">
-      <button class="mt-6 py-2 px-4 bg-gray-500 hover:bg-gray-600 rounded text-whte"
-      data-action="click->cart#checkout">Checkout</button>
-      <button class="py-2 px-4 bg-gray-500 hover:bg-gray-600 rounded text-white"
-      data-action="click->cart#clear">Clear Cart</button>
+
+  <div data-controller="cart" class="mt-6">
+    <!-- Items container -->
+    <div id="items" class="space-y-4"></div>
+
+    <!-- Summary + actions -->
+    <div id="total" class="mt-4 font-medium space-x-4">
+      <!-- New field: total item count -->
+      <span id="total-items"></span>
+      <!-- Existing field: total price -->
+      <span id="total-amount"></span>
+
+      <!-- Your existing buttons -->
+      <button
+        data-action="click->cart#checkout"
+        class="py-2 px-4 bg-blue-600 text-white rounded hover:bg-blue-700"
+      >
+        Checkout
+      </button>
+      <button
+        data-action="click->cart#clear"
+        class="py-2 px-4 bg-red-600 text-white rounded hover:bg-red-700"
+      >
+        Clear Cart
+      </button>
     </div>
   </div>
 </main>
