@@ -20,6 +20,7 @@ export default class extends Controller {
           quantity: 1
         })
       }
+      localStorage.setItem("cart", JSON.stringify(cartArray))
     } else {
       const cartArray = []
       cartArray.push ({
