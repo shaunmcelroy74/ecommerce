@@ -1,0 +1,27 @@
+<main class="pt-28 max-w-7xl mx-auto px-4">
+  <h1 class="text-3xl font-bold mb-6">Search Products</h1>
+
+  <% if @products.any? %>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 my-8">
+      <% @products.each do |product| %>
+        <%= link_to product_path(product), class: "block" do %>
+          <div class="border p-4 rounded hover:shadow-lg transition duration-200">
+            <% if product.images.first %>
+              <%= image_tag product.images.first.variant(:medium), class: "rounded" %>
+            <% else %>
+              <%= image_tag "http://via.placeholder.com/250", class: "rounded" %>
+            <% end %>
+            <h2 class="mt-4 font-bold text-xl"><%= product.name %></h2>
+            <p class="text-gray-700"><%= truncate(product.description, length: 100) %></p>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+
+    <div class="pagination mt-6 flex justify-center">
+      <%= paginate @products %>
+    </div>
+  <% else %>
+    <p class="text-gray-800">No products found for your search criteria.</p>
+  <% end %>
+</main>
