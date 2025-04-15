@@ -11,7 +11,7 @@
     <% @pages.each do |page| %>
       <tr>
   <td>
-    <%= link_to page.title, admin_page_path(page), class: "text-blue-600 hover:underline" %>
+    <%= link_to "#{page.title}:", admin_page_path(page), class: "text-blue-600 hover:underline" %>
   </td>
   <td>
     <%= link_to "Edit", edit_admin_page_path(page), class: "text-green-600 hover:underline" %>
