@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
   # Admin namespace routes
   namespace :admin do
+    resources :pages
     resources :orders
     resources :products
     resources :categories
@@ -24,16 +25,23 @@ Rails.application.routes.draw do
     root to: "admin#index", as: :admin_root
   end
 
-  # Public (non-admin) routes
+  # Public routes for static pages
+  get "/about", to: "pages#about", as: :about
+  get "/contact", to: "pages#contact", as: :contact
+  # You could alternatively have resources :pages, only: [:show] if needed.
+
+  # Public (non-admin) routes for categories
   resources :categories, only: [ :show ]
 
-  # For products, we want only the show action plus a custom search action:
+  # Public (non-admin) routes for products:
+  # Only the show action plus a custom search action.
   resources :products, only: [ :show ] do
     collection do
       get :search
     end
   end
 
+  # Additional custom routes
   get "admin" => "admin#index"
   get "/cart", to: "carts#show", as: :cart
 end
