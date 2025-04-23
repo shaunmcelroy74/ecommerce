@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  devise_for :users
   # Admin namespace routes
   namespace :admin do
     resources :pages
