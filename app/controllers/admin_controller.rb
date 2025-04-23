@@ -6,7 +6,7 @@ class AdminController < ApplicationController
     @quick_stats = {
       sales: Order.where(created_at: Time.now.midnight..Time.now).count,
       revenue: Order.where(created_at: Time.now.midnight..Time.now).sum(:total).round(),
-      avg_sale: Order.where(created_at: Time.now.midnight..Time.now).average(:total).round()
+      avg_sale: Order.where(created_at: Time.zone.now.beginning_of_day..Time.zone.now).average(:total)&.round(2) || 0
     }
   end
 end

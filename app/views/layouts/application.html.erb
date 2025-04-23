@@ -4,33 +4,54 @@
     <title><%= content_for(:title) || "Ecommerce" %></title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="mobile-web-app-capable" content="yes">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= yield :head %>
 
-    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
-    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+    <!-- Font Awesome via CDN -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+      integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+      data-turbo-track="reload"
+    >
 
-    <link rel="icon" href="/icon.png" type="image/png">
-    <link rel="icon" href="/icon.svg" type="image/svg+xml">
-    <link rel="apple-touch-icon" href="/icon.png">
+    <!-- Your compiled app CSS (using importmap) -->
+    <%= stylesheet_link_tag :app, media: "all", "data-turbo-track": "reload" %>
 
-    <%# Includes all stylesheet files in app/assets/stylesheets %>
-    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <!-- Importmap & other JavaScript -->
     <%= javascript_importmap_tags %>
+
+    <!-- (Optional) Bulma or other framework CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   </head>
 
-  <body>
-    <section class="section">
-    <div class="container">
-    <main class="container mx-auto mt-28 px-5 flex">
-      <%= yield %>
+  <body class="bg-gray-800 text-white">
+    <!-- White header at top -->
+    <header class="bg-white p-4 text-gray-900">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Navigation partial (optional) -->
+        <%= render "shared/navbar" %>
       </div>
-    </section>
+    </header>
+
+    <!-- Search bar on white background, right below the header -->
+    <div class="pt-20 bg-white">
+      <div class="max-w-7xl mx-auto px-4 flex justify-center">
+        <%= render "products/search" %>
+      </div>
+    </div>
+
+    <!-- Main content: Featured products, etc. -->
+    <main class="max-w-7xl mx-auto px-4 py-8">
+      <%= yield %>
     </main>
+
+    <footer class="bg-gray-900 p-4 text-center">
+      &copy; <%= Date.today.year %> MyMusic Ecommerce. All rights reserved.
+    </footer>
   </body>
 </html>

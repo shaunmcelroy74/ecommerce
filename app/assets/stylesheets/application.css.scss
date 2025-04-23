@@ -9,4 +9,54 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
- @import "font-awesome";
+ // Variables
+$primary-color: #3498db;
+$secondary-color: #2ecc71;
+$base-padding: 10px;
+$base-margin: 15px;
+$font-stack: 'Helvetica, Arial, sans-serif';
+
+// Inheritance
+%base-box {
+  padding: $base-padding * 2;       // Operator: multiplication.
+  margin: $base-margin * 1.5;        // Operator: multiplication.
+  border: 1px solid darken($primary-color, 10%);
+  font-family: $font-stack;
+}
+
+// Nesting
+.container {
+  background-color: lighten($primary-color, 40%);
+  padding: $base-padding;
+
+  .header {
+    @extend %base-box;              // Inheritance: Extend the base-box styles.
+    background-color: $primary-color;
+    color: white;
+
+    // More Nesting
+    &:hover {
+      background-color: darken($primary-color, 10%);
+    }
+  }
+
+  .content {
+    @extend %base-box;
+    background-color: white;
+    color: $secondary-color;
+
+    // Nesting: Style a descendant element
+    .article {
+      font-size: 16px;
+      // Operator: division to calculate margin.
+      margin-bottom: $base-margin / 2;
+    }
+  }
+
+  .footer {
+    background-color: $secondary-color;
+    color: black;
+    // Operator: addition to adjust padding.
+    padding: $base-padding + 5px;
+  }
+}

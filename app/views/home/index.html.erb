@@ -1,1 +1,55 @@
-<h1>Home</h1>
+<div class="bg-gray-800 text-white text-center py-20">
+  <h1 class="text-5xl font-bold mb-4">
+    Welcome to MyMusic Ecommerce Store
+  </h1>
+  <p class="text-xl mb-12">
+    Your one stop shop for all your music needs!
+  </p>
+  <%= link_to "Shop Now", root_path,
+        class: "inline-block bg-gray-500 hover:bg-gray-600 text-white font-bold py-4 px-8 rounded mt-4" %>
+</div>
+
+<!-- Grid of featured products with same styling as categories -->
+<div class="px-4 py-12">
+  <h2 class="text-3xl font-bold text-center mb-8 text-white">Featured Products</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+    <% @products.each do |product| %>
+      <%= link_to product_path(product), class: "flex flex-col items-center bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition" do %>
+        <div class="w-48 h-48 mb-4 overflow-hidden rounded">
+          <% if product.images.attached? %>
+            <%= image_tag product.images.first.variant(:thumb), class: "w-full h-full object-cover" %>
+          <% else %>
+            <%= image_tag "http://via.placeholder.com/512", class: "w-full h-full object-cover" %>
+          <% end %>
+        </div>
+        <h2 class="text-white font-medium text-lg text-center">
+          <%= product.name %>
+        </h2>
+        <p class="text-white text-center">
+          <%= number_to_currency(product.price / 100.0) %>
+        </p>
+      <% end %>
+    <% end %>
+  </div>
+</div>
+
+<!-- Grid of categories remains unchanged -->
+<div class="px-4 py-12">
+  <h2 class="text-3xl font-bold text-center mb-8 text-white">Categories</h2>
+  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10">
+    <% @main_categories.each do |category| %>
+      <%= link_to category_path(category), class: "flex flex-col items-center bg-gray-700 p-4 rounded-lg hover:bg-gray-600 transition" do %>
+        <div class="w-48 h-48 mb-4 overflow-hidden rounded">
+          <% if category.image.attached? %>
+            <%= image_tag category.image, class: "w-full h-full object-cover" %>
+          <% else %>
+            <%= image_tag "http://via.placeholder.com/512", class: "w-full h-full object-cover" %>
+          <% end %>
+        </div>
+        <h2 class="text-white font-medium text-lg text-center">
+          <%= category.name %>
+        </h2>
+      <% end %>
+    <% end %>
+  </div>
+</div>
