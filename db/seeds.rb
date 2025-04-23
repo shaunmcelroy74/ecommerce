@@ -15,3 +15,23 @@ end
 Page.find_or_create_by!(title: 'Contact') do |page|
   page.content = "This is our contact page. Provide your contact details or a contact form here."
 end
+
+[
+  [ "Ontario",                     "ON" ],
+  [ "Quebec",                      "QC" ],
+  [ "Nova Scotia",                 "NS" ],
+  [ "New Brunswick",               "NB" ],
+  [ "Manitoba",                    "MB" ],
+  [ "British Columbia",            "BC" ],
+  [ "Prince Edward Island",        "PE" ],
+  [ "Saskatchewan",                "SK" ],
+  [ "Alberta",                     "AB" ],
+  [ "Newfoundland and Labrador",   "NL" ],
+  [ "Northwest Territories",       "NT" ],
+  [ "Yukon",                       "YT" ],
+  [ "Nunavut",                     "NU" ]
+].each do |name, code|
+  Province.find_or_create_by!(code: code) do |province|
+    province.name = name
+  end
+end
