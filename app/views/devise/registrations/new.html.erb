@@ -3,21 +3,57 @@
 <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
   <%= render "devise/shared/error_messages", resource: resource %>
 
+  <!-- Name fields -->
   <div class="field">
-    <%= f.label :email %><br />
+    <%= f.label :first_name, "First name" %><br/>
+    <%= f.text_field :first_name, placeholder: "First name", required: true %>
+  </div>
+
+  <div class="field">
+    <%= f.label :last_name, "Last name" %><br/>
+    <%= f.text_field :last_name, placeholder: "Last name", required: true %>
+  </div>
+
+  <!-- Address fields -->
+  <div class="field">
+    <%= f.label :street, "Street address" %><br/>
+    <%= f.text_field :street, placeholder: "Street address" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :city, "City" %><br/>
+    <%= f.text_field :city, placeholder: "City" %>
+  </div>
+
+  <div class="field">
+    <%= f.label :province_id, "Province" %><br/>
+    <%= f.collection_select :province_id,
+          Province.order(:name), :id, :name,
+          { prompt: "Select Province" },
+          { class: "border p-2" } %>
+  </div>
+
+  <div class="field">
+    <%= f.label :postal_code, "Postal Code" %><br/>
+    <%= f.text_field :postal_code, placeholder: "Postal Code" %>
+  </div>
+
+  <!-- Devise core fields -->
+  <div class="field">
+    <%= f.label :email %><br/>
     <%= f.email_field :email, autofocus: true, autocomplete: "email" %>
   </div>
 
   <div class="field">
     <%= f.label :password %>
     <% if @minimum_password_length %>
-    <em>(<%= @minimum_password_length %> characters minimum)</em>
-    <% end %><br />
+      <em>(<%= @minimum_password_length %> characters minimum)</em>
+    <% end %><br/>
     <%= f.password_field :password, autocomplete: "new-password" %>
   </div>
 
   <div class="field">
-    <%= f.label :password_confirmation %><br />
+    <%= f.label :password_confirmation %><br/>
     <%= f.password_field :password_confirmation, autocomplete: "new-password" %>
   </div>
 
