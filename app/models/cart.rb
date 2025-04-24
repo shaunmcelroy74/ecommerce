@@ -25,8 +25,8 @@ class Cart < ApplicationRecord
     cart_items.includes(:product)
   end
 
-  # (optional) total price in cents
+  # total price in cents
   def subtotal_cents
-    items.inject(0) { |sum, item| sum + item.quantity * item.product.price_cents }
+    items.inject(0) { |sum, item| sum + item.quantity * item.product.price }
   end
 end

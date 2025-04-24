@@ -1,12 +1,13 @@
-<h1>Review Your Order</h1>
+<h1 class="text-3xl font-bold mb-4">Review Your Order</h1>
 
 <%= form_with url: checkouts_path, method: :post, local: true do |f| %>
   <fieldset class="mb-6 p-4 border rounded">
     <legend class="font-bold">Shipping Address</legend>
 
-    <%# if the user has never filled in their address, prompt them %>
     <% if current_user.street.blank? || current_user.city.blank? || current_user.postal_code.blank? %>
-      <p class="mb-4 text-red-600">Please confirm your address before placing the order.</p>
+      <p class="mb-4 text-red-600">
+        Please confirm your address before placing the order.
+      </p>
     <% end %>
 
     <%= f.fields_for :user, current_user do |u| %>
@@ -21,8 +22,7 @@
       <div class="mb-2">
         <%= u.label :province_id, "Province", class: "block font-medium" %>
         <%= u.collection_select :province_id,
-              Province.order(:name),
-              :id, :name,
+              Province.order(:name), :id, :name,
               { prompt: "Select Province", required: true },
               class: "w-full border p-2 rounded" %>
       </div>
@@ -40,21 +40,40 @@
         <th class="p-2 text-left">Product</th>
         <th class="p-2 text-right">Qty</th>
         <th class="p-2 text-right">Unit Price</th>
-        <th class="p-2 text-right">Line Total</th>
+        <th class="p-2 text-right">Subtotal</th>
+        <th class="p-2 text-right">Tax</th>
+        <th class="p-2 text-right">Total</th>
       </tr>
     </thead>
     <tbody>
       <% @cart.items.each do |item| %>
-        <% p = item.product %>
+        <% product      = item.product %>
+        <% qty          = item.quantity %>
+        <% unit_price   = product.price            # in cents %>
+        <% line_sub     = unit_price * qty         # in cents %>
+        <% tc           = TaxCalculator.new(line_sub, current_user.province.code) %>
+        <% line_tax     = tc.gst_cents + tc.pst_cents + tc.hst_cents %>
         <tr>
-          <td class="p-2"><%= p.name %></td>
-          <td class="p-2 text-right"><%= item.quantity %></td>
-          <td class="p-2 text-right"><%= number_to_currency(p.price_cents / 100.0) %></td>
-          <td class="p-2 text-right"><%= number_to_currency((p.price_cents * item.quantity) / 100.0) %></td>
+          <td class="p-2"><%= product.name %></td>
+          <td class="p-2 text-right"><%= qty %></td>
+          <td class="p-2 text-right"><%= number_to_currency(unit_price/100.0) %></td>
+          <td class="p-2 text-right"><%= number_to_currency(line_sub/100.0) %></td>
+          <td class="p-2 text-right"><%= number_to_currency(line_tax/100.0) %></td>
+          <td class="p-2 text-right">
+            <%= number_to_currency((line_sub + line_tax)/100.0) %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
+
+  <!-- overall pre-tax subtotal -->
+  <p class="text-right font-semibold mb-6">
+    Subtotal (before tax):
+    <%= number_to_currency(
+          @cart.items.sum { |itm| itm.quantity * itm.product.price } / 100.0
+        ) %>
+  </p>
 
   <div class="flex justify-end space-x-4">
     <%= link_to "Back to Cart", cart_path, class: "px-4 py-2 border rounded" %>
