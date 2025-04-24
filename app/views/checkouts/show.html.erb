@@ -7,8 +7,7 @@
 <section class="mb-8">
   <h2 class="text-2xl font-semibold mb-2">Shipping To</h2>
   <p>
-    <%= @order.street %>, <%= @order.city %>,
-    <%= @order.province.name %>, <%= @order.postal_code %>
+    <%= [@order.street, @order.city, @order.province.name, @order.postal_code].join(", ") %>
   </p>
 </section>
 
@@ -20,7 +19,7 @@
         <th class="p-2 text-left">Item</th>
         <th class="p-2 text-right">Unit Price</th>
         <th class="p-2 text-right">Qty</th>
-        <th class="p-2 text-right">Tax</th>
+        <th class="p-2 text-right">Line Tax</th>
         <th class="p-2 text-right">Line Total</th>
       </tr>
     </thead>
@@ -43,8 +42,16 @@
         <td class="p-2 text-right"><%= number_to_currency(@order.subtotal_cents / 100.0) %></td>
       </tr>
       <tr>
-        <th colspan="4" class="p-2 text-right">Total Tax:</th>
-        <td class="p-2 text-right"><%= number_to_currency(@order.total_tax_cents / 100.0) %></td>
+        <th colspan="4" class="p-2 text-right">GST (<%= (@order.gst_rate * 100).round(2) %>%):</th>
+        <td class="p-2 text-right"><%= number_to_currency(@order.gst_cents / 100.0) %></td>
+      </tr>
+      <tr>
+        <th colspan="4" class="p-2 text-right">PST (<%= (@order.pst_rate * 100).round(2) %>%):</th>
+        <td class="p-2 text-right"><%= number_to_currency(@order.pst_cents / 100.0) %></td>
+      </tr>
+      <tr>
+        <th colspan="4" class="p-2 text-right">HST (<%= (@order.hst_rate * 100).round(2) %>%):</th>
+        <td class="p-2 text-right"><%= number_to_currency(@order.hst_cents / 100.0) %></td>
       </tr>
       <tr>
         <th colspan="4" class="p-2 text-right font-bold">Grand Total:</th>

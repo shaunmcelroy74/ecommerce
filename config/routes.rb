@@ -10,6 +10,8 @@ Rails.application.routes.draw do
     resources :products
     resources :categories
     resources :checkouts, only: [ :new, :create, :show ]
+    resource  :cart,       only: [ :show ]
+    resources :cart_items, only: [ :create, :update, :destroy ]
   end
 
   # Devise routes for admin authentication
