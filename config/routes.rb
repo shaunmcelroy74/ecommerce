@@ -9,6 +9,7 @@ Rails.application.routes.draw do
     resources :orders
     resources :products
     resources :categories
+    resources :checkouts, only: [ :new, :create, :show ]
   end
 
   # Devise routes for admin authentication
