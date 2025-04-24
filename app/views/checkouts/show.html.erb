@@ -1,4 +1,45 @@
-<div>
-  <h1 class="font-bold text-4xl">Checkouts#show</h1>
-  <p>Find me in app/views/checkouts/show.html.erb</p>
+# app/views/checkouts/show.html.erb
+<h1 class="text-3xl font-bold mb-6">Thank you for your order!</h1>
+<h2 class="text-2xl font-semibold mb-4">Order ##<%= @order.id %></h2>
+
+<div class="mb-6">
+  <strong>Shipping To:</strong><br/>
+  <%= @order.street %>, <%= @order.city %>, <%= @order.province.name %>, <%= @order.postal_code %>
 </div>
+
+<table class="min-w-full bg-white">
+  <thead>
+    <tr>
+      <th class="px-4 py-2 text-left">Item</th>
+      <th class="px-4 py-2 text-right">Unit Price</th>
+      <th class="px-4 py-2 text-right">Qty</th>
+      <th class="px-4 py-2 text-right">Tax</th>
+      <th class="px-4 py-2 text-right">Total</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @order.order_products.each do |line| %>
+      <tr>
+        <td class="border px-4 py-2"><%= line.product_name %></td>
+        <td class="border px-4 py-2 text-right"><%= number_to_currency(line.unit_price_cents / 100.0) %></td>
+        <td class="border px-4 py-2 text-right"><%= line.quantity %></td>
+        <td class="border px-4 py-2 text-right"><%= number_to_currency(line.tax_cents / 100.0) %></td>
+        <td class="border px-4 py-2 text-right"><%= number_to_currency((line.unit_price_cents * line.quantity + line.tax_cents) / 100.0) %></td>
+      </tr>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <th colspan="4" class="px-4 py-2 text-right">Subtotal:</th>
+      <td class="border px-4 py-2 text-right"><%= number_to_currency(@order.subtotal) %></td>
+    </tr>
+    <tr>
+      <th colspan="4" class="px-4 py-2 text-right">Tax Total:</th>
+      <td class="border px-4 py-2 text-right"><%= number_to_currency(@order.total_tax) %></td>
+    </tr>
+    <tr>
+      <th colspan="4" class="px-4 py-2 text-right">Grand Total:</th>
+      <td class="border px-4 py-2 text-right font-semibold"><%= number_to_currency(@order.grand_total) %></td>
+    </tr>
+  </tfoot>
+</table>
