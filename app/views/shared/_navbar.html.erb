@@ -24,9 +24,15 @@
       <div class="flex items-center space-x-6">
         <!-- Cart Icon -->
         <%= link_to cart_path,
-              class: "text-gray-500 hover:underline py-2 rounded-md text-md font-medium" do %>
-          <i class="fa-solid fa-cart-shopping fa-lg"></i>
-        <% end %>
+      class: "relative text-gray-500 hover:underline py-2 rounded-md text-md font-medium" do %>
+      <i class="fa-solid fa-cart-shopping fa-lg"></i>
+        <% if current_cart.total_items.positive? %>
+      <span
+        class="absolute -top-1 -right-1 bg-red-600 text-white rounded-full text-xs w-5 h-5 flex items-center justify-center">
+        <%= current_cart.total_items %>
+      </span>
+    <% end %>
+<% end %>
 
         <!-- Devise Sign-in/Out -->
         <% if user_signed_in? %>
