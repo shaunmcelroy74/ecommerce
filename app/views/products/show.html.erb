@@ -12,7 +12,7 @@
     <!-- Details & Add to Cart -->
     <div class="flex flex-col items-start max-w-sm space-y-6">
       <h1 class="font-bold text-4xl uppercase"><%= @product.name %></h1>
-      <p class="text-2xl mt-4">$<%= number_to_currency(@product.price_cents / 100.0).delete("$") %></p>
+      <p class="text-2xl mt-4"><%= number_to_currency(@product.price / 100.0) %></p>
       <p class="text-md py-4"><%= @product.description %></p>
 
       <!-- Rails-powered “Add to Cart” button -->

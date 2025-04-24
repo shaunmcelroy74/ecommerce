@@ -1,6 +1,9 @@
 class CartItemsController < ApplicationController
   def create
-    current_cart.add_product(params[:product_id])
+    # build or increment
+    item = current_cart.cart_items.find_or_initialize_by(product_id: params[:product_id])
+    item.quantity += 1
+    item.save!
     redirect_to cart_path, notice: "Added to cart!"
   end
 
