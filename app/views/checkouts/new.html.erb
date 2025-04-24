@@ -1,39 +1,62 @@
-<h1>Review Your Order</h1>
+<h1 class="text-3xl font-bold mb-6">Review Your Order</h1>
 
-<% if @address_missing %>
-  <h2>Please confirm your address</h2>
-  <%= form_with model: current_user, url: checkouts_path, method: :post do |f| %>
-    <%= f.text_field :street,        placeholder: "Street",     required: true %>
-    <%= f.text_field :city,          placeholder: "City",       required: true %>
-    <%= f.collection_select :province_id, Province.order(:name), :id, :name, prompt: "Province", required: true %>
-    <%= f.text_field :postal_code,   placeholder: "Postal Code",required: true %>
-    <%= f.submit "Continue to Payment" %>
-  <% end %>
-<% else %>
-  <h2>Shipping To</h2>
-  <p>
-    <%= @user.street %>, <%= @user.city %>, <%= @user.province.name %>, <%= @user.postal_code %>
-  </p>
-  <%= button_to "Place Order", checkouts_path, method: :post %>
-<% end %>
-
-<hr>
-
-<h2>Your Cart</h2>
-<table>
-  <thead>
-    <tr><th>Product</th><th>Qty</th><th>Price</th><th>Line Total</th></tr>
-  </thead>
-  <tbody>
-    <% @cart.items.each do |item| %>
-      <% p = item.product %>
-      <tr>
-        <td><%= p.name %></td>
-        <td><%= item.quantity %></td>
-        <td>$<%= p.price_cents/100.0 %></td>
-        <td>$<%= item.quantity * p.price_cents/100.0 %></td>
-      </tr>
+<%= form_with url: checkouts_path, method: :post do |f| %>
+  <% if @address_missing %>
+    <h2 class="text-xl font-semibold mb-4">Please confirm your address</h2>
+    <%= f.fields_for :user, current_user do |u| %>
+      <div class="mb-3">
+        <%= u.label :street, "Street" %><br/>
+        <%= u.text_field :street, required: true, class: "border p-2 w-full" %>
+      </div>
+      <div class="mb-3">
+        <%= u.label :city, "City" %><br/>
+        <%= u.text_field :city, required: true, class: "border p-2 w-full" %>
+      </div>
+      <div class="mb-3">
+        <%= u.label :province_id, "Province" %><br/>
+        <%= u.collection_select :province_id, Province.order(:name), :id, :name, { prompt: "Select Province" }, class: "border p-2 w-full" %>
+      </div>
+      <div class="mb-3">
+        <%= u.label :postal_code, "Postal Code" %><br/>
+        <%= u.text_field :postal_code, required: true, class: "border p-2 w-full" %>
+      </div>
     <% end %>
-  </tbody>
-</table>
-<p>Subtotal: $<%= @cart.subtotal %></p>
+    <%= f.submit "Continue to Review", class: "bg-blue-600 hover:bg-blue-500 text-white py-2 px-4 rounded" %>
+  <% else %>
+    <h2 class="text-xl font-semibold mb-4">Shipping To</h2>
+    <p class="mb-4">
+      <%= @user.street %>, <%= @user.city %>, <%= @user.province.name %>, <%= @user.postal_code %>
+    </p>
+    <%= f.submit "Place Order", class: "bg-green-600 hover:bg-green-500 text-white py-2 px-4 rounded" %>
+  <% end %>
+
+  <hr class="my-6"/>
+
+  <h2 class="text-xl font-semibold mb-4">Order Summary</h2>
+  <table class="min-w-full bg-white">
+    <thead>
+      <tr>
+        <th class="px-4 py-2 text-left">Product</th>
+        <th class="px-4 py-2 text-right">Qty</th>
+        <th class="px-4 py-2 text-right">Unit Price</th>
+        <th class="px-4 py-2 text-right">Line Total</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @cart.items.each do |item| %>
+        <% p = item.product %>
+        <tr>
+          <td class="border px-4 py-2"><%= p.name %></td>
+          <td class="border px-4 py-2 text-right"><%= item.quantity %></td>
+          <td class="border px-4 py-2 text-right"><%= number_to_currency(p.price_cents / 100.0) %></td>
+          <td class="border px-4 py-2 text-right"><%= number_to_currency(item.quantity * p.price_cents / 100.0) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <div class="mt-4 text-right">
+    <p>Subtotal: <%= number_to_currency(@cart.subtotal) %></p>
+    <p>Tax:      <%= number_to_currency(@cart.total_tax) %></p>
+    <p class="font-semibold">Grand Total: <%= number_to_currency(@cart.grand_total) %></p>
+  </div>
+<% end %>

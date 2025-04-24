@@ -1,5 +1,5 @@
 class CheckoutsController < ApplicationController
-  before_action :authenticate_user!   # if you require a logged-in customer
+  before_action :authenticate_user!
 
   def new
     @cart = current_cart
