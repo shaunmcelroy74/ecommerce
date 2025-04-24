@@ -1,4 +1,7 @@
 Rails.application.routes.draw do
+  get "checkouts/new"
+  get "checkouts/create"
+  get "checkouts/show"
   devise_for :users
   # Admin namespace routes
   namespace :admin do
