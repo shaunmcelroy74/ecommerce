@@ -1,4 +1,39 @@
-<div>
-  <h1 class="font-bold text-4xl">Checkouts#new</h1>
-  <p>Find me in app/views/checkouts/new.html.erb</p>
-</div>
+<h1>Review Your Order</h1>
+
+<% if @address_missing %>
+  <h2>Please confirm your address</h2>
+  <%= form_with model: current_user, url: checkouts_path, method: :post do |f| %>
+    <%= f.text_field :street,        placeholder: "Street",     required: true %>
+    <%= f.text_field :city,          placeholder: "City",       required: true %>
+    <%= f.collection_select :province_id, Province.order(:name), :id, :name, prompt: "Province", required: true %>
+    <%= f.text_field :postal_code,   placeholder: "Postal Code",required: true %>
+    <%= f.submit "Continue to Payment" %>
+  <% end %>
+<% else %>
+  <h2>Shipping To</h2>
+  <p>
+    <%= @user.street %>, <%= @user.city %>, <%= @user.province.name %>, <%= @user.postal_code %>
+  </p>
+  <%= button_to "Place Order", checkouts_path, method: :post %>
+<% end %>
+
+<hr>
+
+<h2>Your Cart</h2>
+<table>
+  <thead>
+    <tr><th>Product</th><th>Qty</th><th>Price</th><th>Line Total</th></tr>
+  </thead>
+  <tbody>
+    <% @cart.items.each do |item| %>
+      <% p = item.product %>
+      <tr>
+        <td><%= p.name %></td>
+        <td><%= item.quantity %></td>
+        <td>$<%= p.price_cents/100.0 %></td>
+        <td>$<%= item.quantity * p.price_cents/100.0 %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<p>Subtotal: $<%= @cart.subtotal %></p>
