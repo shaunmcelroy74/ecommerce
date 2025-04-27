@@ -30,7 +30,7 @@ class CheckoutsController < ApplicationController
       @cart.items.each do |item|
         product = item.product
         qty     = item.quantity
-        price   = product.price_cents
+        price   = product.price
 
         # use your TaxCalculator for per‐item rate (if you still want per‐line taxes)
         tax_data = TaxCalculator.new(price * qty, current_user.province.code).rates

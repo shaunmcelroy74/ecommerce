@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_04_24_172530) do
+ActiveRecord::Schema[8.0].define(version: 2025_04_27_185643) do
   create_table "active_storage_attachments", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -105,6 +105,9 @@ ActiveRecord::Schema[8.0].define(version: 2025_04_24_172530) do
     t.decimal "gst_rate", precision: 5, scale: 4
     t.decimal "pst_rate", precision: 5, scale: 4
     t.decimal "hst_rate", precision: 5, scale: 4
+    t.integer "subtotal_cents"
+    t.integer "total_tax_cents"
+    t.integer "grand_total_cents"
     t.index ["province_id"], name: "index_orders_on_province_id"
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
