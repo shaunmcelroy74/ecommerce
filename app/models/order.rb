@@ -1,5 +1,9 @@
-## app/models/order.rb
+# app/models/order.rb
 class Order < ApplicationRecord
+  # Add Stripe payment fields
+  attribute :paid, :boolean, default: false
+  validates :stripe_payment_id, presence: true, if: :paid?
+
   # Associations
   belongs_to :user,     optional: true
   belongs_to :province, optional: true

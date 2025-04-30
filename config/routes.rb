@@ -1,5 +1,7 @@
 # config/routes.rb
 Rails.application.routes.draw do
+  get "payments/success"
+  get "payments/cancel"
   # ─── Customer (public) side ───────────────────────────────────────────────
 
   # Devise for customers
