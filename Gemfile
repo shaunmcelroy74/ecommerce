@@ -67,3 +67,4 @@ end
 gem "devise", "~> 4.9"
 gem "font-awesome-sass", "~> 5.15.1"
 gem "kaminari"
+gem "stripe"
