@@ -68,4 +68,6 @@ gem "devise", "~> 4.9"
 gem "font-awesome-sass", "~> 5.15.1"
 gem "kaminari"
 gem "stripe"
-gem "dotenv-rails"
+group :development, :test do
+  gem "dotenv-rails"
+end

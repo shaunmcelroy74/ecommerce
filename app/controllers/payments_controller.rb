@@ -1,42 +1,57 @@
+# app/controllers/payments_controller.rb
 class PaymentsController < ApplicationController
   before_action :authenticate_user!
 
   def create
-    order = current_user.orders.find(params[:order_id] || params[:id])
-    session = Stripe::Checkout::Session.create(
+    order        = current_user.orders.find(params[:order_id])
+    success_base = success_payments_url(order_id: order.id)
+
+    stripe_session = Stripe::Checkout::Session.create(
       payment_method_types: [ "card" ],
-      line_items: order.order_products.map do |op|
+      line_items: order.order_products.map do |line|
         {
           price_data: {
-            currency: "cad",
-            unit_amount: op.unit_price_cents,
-            product_data: { name: op.product_name }
+            currency:     "cad",
+            product_data: { name: line.product_name },
+            unit_amount:  line.unit_price_cents
           },
-          quantity: op.quantity
+          quantity: line.quantity
         }
       end,
-      mode: "payment",
-      success_url: payments_success_url + "?order_id=#{order.id}&session_id={CHECKOUT_SESSION_ID}",
-      cancel_url:  payments_cancel_url + "?order_id=#{order.id}"
+      mode:       "payment",
+      success_url: "#{success_base}&session_id={CHECKOUT_SESSION_ID}",
+      cancel_url:  cancel_payments_url(order_id: order.id)
     )
 
-    redirect_to session.url, allow_other_host: true
+    order.update!(stripe_session_id: stripe_session.id)
+    redirect_to stripe_session.url, allow_other_host: true
   end
 
   def success
-    order = current_user.orders.find(params[:order_id])
+    @order         = current_user.orders.find(params[:order_id])
     stripe_session = Stripe::Checkout::Session.retrieve(params[:session_id])
 
     if stripe_session.payment_status == "paid"
-      order.update!(paid: true, stripe_payment_id: stripe_session.payment_intent)
-      redirect_to checkout_path(order), notice: "Payment received—thank you!"
+      @order.update!(
+        paid:              true,
+        stripe_payment_id: stripe_session.payment_intent
+      )
+      flash.now[:notice] = "Payment received—thank you!"
+      render :success
     else
-      redirect_to payments_cancel_path(order_id: order.id), alert: "Payment not completed."
+      redirect_to cancel_payments_path(order_id: @order.id),
+                  alert: "Payment not completed."
     end
   end
 
   def cancel
-    order = current_user.orders.find(params[:order_id])
-    redirect_to checkout_path(order), alert: "Payment canceled. You can try again."
+    @order = current_user.orders.find(params[:order_id])
+
+    # set an alert (optional—you can use flash.now if you only
+    # want it to show on this rendered view)
+    flash.now[:alert] = "Payment canceled—feel free to try again."
+
+    # render app/views/payments/cancel.html.erb
+    render :cancel
   end
 end
