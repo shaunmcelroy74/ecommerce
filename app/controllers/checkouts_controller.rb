@@ -1,3 +1,4 @@
+# app/controllers/checkouts_controller.rb
 class CheckoutsController < ApplicationController
   before_action :authenticate_user!
 
@@ -32,7 +33,7 @@ class CheckoutsController < ApplicationController
         qty     = item.quantity
         price   = product.price
 
-        # use your TaxCalculator for per‐item rate (if you still want per‐line taxes)
+        # tax_data is a hash with :gst, :pst, :hst rates
         tax_data = TaxCalculator.new(price * qty, current_user.province.code).rates
         line_tax = (price * qty * tax_data[:gst] +
                     price * qty * tax_data[:pst] +
@@ -44,25 +45,25 @@ class CheckoutsController < ApplicationController
           product_name:     product.name,
           quantity:         qty,
           tax_cents:        line_tax,
-          tax_rate:         tax_data[:gst] + tax_data[:pst] + tax_data[:hst]
+          tax_rate:         tax_data.values.sum
         )
 
         subtotal  += price * qty
         total_tax += line_tax
       end
 
-      # 4) At the order‐level, recalc using TaxCalculator
+      # 4) Order‐level totals
       calc = TaxCalculator.new(subtotal, current_user.province.code)
       @order.assign_attributes(
-        subtotal_cents:  subtotal,
-        total_tax_cents: calc.gst_cents + calc.pst_cents + calc.hst_cents,
+        subtotal_cents:    subtotal,
+        total_tax_cents:   calc.gst_cents + calc.pst_cents + calc.hst_cents,
         grand_total_cents: subtotal + calc.gst_cents + calc.pst_cents + calc.hst_cents,
-        gst_cents:       calc.gst_cents,
-        pst_cents:       calc.pst_cents,
-        hst_cents:       calc.hst_cents,
-        gst_rate:        calc.rates[:gst],
-        pst_rate:        calc.rates[:pst],
-        hst_rate:        calc.rates[:hst]
+        gst_cents:         calc.gst_cents,
+        pst_cents:         calc.pst_cents,
+        hst_cents:         calc.hst_cents,
+        gst_rate:          calc.rates[:gst],
+        pst_rate:          calc.rates[:pst],
+        hst_rate:          calc.rates[:hst]
       )
 
       @order.save!
@@ -76,6 +77,15 @@ class CheckoutsController < ApplicationController
 
   def show
     @order = Order.find(params[:id])
+
+    # If Stripe has redirected back with `?paid=true`, confirm payment and mark paid
+    if params[:paid] == "true" && @order.stripe_session_id.present?
+      session_data = Stripe::Checkout::Session.retrieve(@order.stripe_session_id)
+      if session_data.payment_status == "paid"
+        @order.update!(paid: true, stripe_payment_id: session_data.payment_intent)
+      end
+    end
+
     # renders app/views/checkouts/show.html.erb (your invoice)
   end
 

@@ -19,8 +19,8 @@
         <th class="p-2 text-left">Item</th>
         <th class="p-2 text-right">Unit Price</th>
         <th class="p-2 text-right">Qty</th>
-        <th class="p-2 text-right">Line Tax</th>
-        <th class="p-2 text-right">Line Total</th>
+        <th class="p-2 text-right">Tax</th>
+        <th class="p-2 text-right">Total</th>
       </tr>
     </thead>
     <tbody>
@@ -63,3 +63,8 @@
 
 <%= link_to "Back to Shop", root_path,
       class: "inline-block px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" %>
+
+<%= link_to "Pay Now", payments_path(order_id: @order.id),
+      method: :post,
+      class: "inline-block px-4 py-2 bg-gray-200 rounded hover:bg-gray-300" %>
+
