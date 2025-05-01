@@ -1,10 +1,19 @@
 <% content_for :title, "Editing product" %>
 
 <div class="md:w-2/3 w-full">
-  <h1 class="font-bold text-4xl">Editing product</h1>
+  <h1 class="text-4xl font-bold mb-6">Editing product</h1>
 
   <%= render "form", admin_product: @admin_product %>
 
-  <%= link_to "Show this product", admin_product_path(@admin_product), class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to products", admin_products_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
+  <div class="mt-6 flex flex-wrap gap-3">
+    <!-- Show this product -->
+    <%= link_to "Show this product",
+                admin_product_path(@admin_product),
+                class: "inline-block px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white font-medium rounded-md text-center" %>
+
+    <!-- Back to products -->
+    <%= link_to "Back to products",
+                admin_products_path,
+                class: "inline-block px-4 py-2 bg-gray-700 hover:bg-gray-600 text-white font-medium rounded-md text-center" %>
+  </div>
 </div>

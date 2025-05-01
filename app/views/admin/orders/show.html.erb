@@ -2,16 +2,32 @@
 
 <div class="md:w-2/3 w-full">
   <% if notice.present? %>
-    <p class="py-2 px-3 bg-green-50 mb-5 text-green-500 font-medium rounded-md inline-block" id="notice"><%= notice %></p>
+    <p id="notice"
+       class="inline-block py-2 px-3 mb-5 bg-green-50 text-green-700 font-medium rounded-md">
+      <%= notice %>
+    </p>
   <% end %>
 
-  <h1 class="font-bold text-4xl">Showing order</h1>
+  <h1 class="text-4xl font-bold mb-6">Showing order</h1>
 
   <%= render @admin_order %>
 
-  <%= link_to "Edit this order", edit_admin_order_path(@admin_order), class: "w-full sm:w-auto text-center rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <%= link_to "Back to orders", admin_orders_path, class: "w-full sm:w-auto text-center mt-2 sm:mt-0 sm:ml-2 rounded-md px-3.5 py-2.5 bg-gray-100 hover:bg-gray-50 inline-block font-medium" %>
-  <div class="sm:inline-block mt-2 sm:mt-0 sm:ml-2">
-    <%= button_to "Destroy this order", admin_order_path(@admin_order), method: :delete, class: "...", data: { turbo_confirm: "Are you sure?" } %>
+  <div class="mt-6 flex flex-wrap gap-3">
+    <!-- Edit button -->
+    <%= link_to "Edit this order",
+                edit_admin_order_path(@admin_order),
+                class: "inline-block px-4 py-2 bg-blue-600 hover:bg-blue-500 text-white font-medium rounded-md text-center" %>
+
+    <!-- Back to index -->
+    <%= link_to "Back to orders",
+                admin_orders_path,
+                class: "inline-block px-4 py-2 bg-gray-600 hover:bg-gray-500 text-white font-medium rounded-md text-center" %>
+
+    <!-- Destroy button -->
+    <%= button_to "Destroy this order",
+                  admin_order_path(@admin_order),
+                  method: :delete,
+                  data: { turbo_confirm: "Are you sure?" },
+                  class: "inline-block px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-medium rounded-md text-center" %>
   </div>
 </div>
