@@ -27,7 +27,7 @@
                                  value: item.quantity,
                                  in: 1..99,
                                  class: "w-16 text-center" %>
-              <%= f.submit "Update", class: "ml-2 px-2 py-1 bg-gray-200 rounded" %>
+              <%= f.submit "Update", class: "ml-2 px-2 py-1 bg-gray-200 rounded text-black" %>
             <% end %>
           </td>
           <td><%= number_to_currency(p.price / 100.0) %></td>
@@ -45,7 +45,7 @@
   </table>
 
   <%= link_to "Proceed to Checkout", new_checkout_path,
-              class: "px-4 py-2 bg-blue-600 text-white rounded" %>
+              class: "px-4 py-2 bg-gray-600 text-white rounded" %>
 <% else %>
   <p>Your cart is empty</p>
 <% end %>

@@ -6,21 +6,38 @@ class PaymentsController < ApplicationController
     order        = current_user.orders.find(params[:order_id])
     success_base = success_payments_url(order_id: order.id)
 
+    # 1) Build the product lines
+    items = order.order_products.map do |line|
+      {
+        price_data: {
+          currency:     "cad",
+          product_data: { name: line.product_name },
+          unit_amount:  line.unit_price_cents
+        },
+        quantity: line.quantity
+      }
+    end
+
+    # 2) Append a "Taxes" line if there is any tax
+    tax_cents = order.gst_cents + order.pst_cents + order.hst_cents
+    if tax_cents.positive?
+      items << {
+        price_data: {
+          currency:     "cad",
+          product_data: { name: "Taxes" },
+          unit_amount:  tax_cents
+        },
+        quantity: 1
+      }
+    end
+
+    # 3) Create the Stripe session using our augmented items
     stripe_session = Stripe::Checkout::Session.create(
       payment_method_types: [ "card" ],
-      line_items: order.order_products.map do |line|
-        {
-          price_data: {
-            currency:     "cad",
-            product_data: { name: line.product_name },
-            unit_amount:  line.unit_price_cents
-          },
-          quantity: line.quantity
-        }
-      end,
-      mode:       "payment",
-      success_url: "#{success_base}&session_id={CHECKOUT_SESSION_ID}",
-      cancel_url:  cancel_payments_url(order_id: order.id)
+      line_items:           items,
+      mode:                 "payment",
+      success_url:          "#{success_base}&session_id={CHECKOUT_SESSION_ID}",
+      cancel_url:           cancel_payments_url(order_id: order.id)
     )
 
     order.update!(stripe_session_id: stripe_session.id)
@@ -46,12 +63,7 @@ class PaymentsController < ApplicationController
 
   def cancel
     @order = current_user.orders.find(params[:order_id])
-
-    # set an alert (optional—you can use flash.now if you only
-    # want it to show on this rendered view)
     flash.now[:alert] = "Payment canceled—feel free to try again."
-
-    # render app/views/payments/cancel.html.erb
     render :cancel
   end
 end
