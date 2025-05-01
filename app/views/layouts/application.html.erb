@@ -29,14 +29,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
   </head>
 
-  <body class="bg-gray-800 text-white">
-    <!-- White header at top -->
-    <header class="bg-white p-4 text-gray-900">
-      <div class="max-w-7xl mx-auto flex items-center justify-between">
-        <!-- Navigation partial (optional) -->
-        <%= render "shared/navbar" %>
-      </div>
-    </header>
+
 
     <!-- Search bar on white background, right below the header -->
     <div class="pt-20 bg-white">
@@ -44,6 +37,15 @@
         <%= render "products/search" %>
       </div>
     </div>
+
+      <body class="bg-gray-800 text-white">
+    <!-- White header at top -->
+    <header class="bg-white p-4 text-gray-900">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <!-- Navigation partial (optional) -->
+        <%= render "shared/navbar" %>
+      </div>
+    </header>
 
     <!-- Main content: Featured products, etc. -->
     <main class="max-w-7xl mx-auto px-4 py-8">
